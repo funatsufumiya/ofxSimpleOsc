@@ -75,11 +75,14 @@ void ofApp::setup(){
 			.when("/test3", [&](const ofxOscMessage& m){
                                 ofLog() << "test3 (" << m.getArgAsString(0) << ")";
                         })
+			.else_show_warning(); // Show not handled warning
+
                         // .else_([&](const ofxOscMessage& m){
                         //      // if you want to write code at end of method chain,
-                        //      // write anything here :)
+                        //      // please add .else_() instead of .else_show_warning()
+                        //      // for warning, in this block, you can use
+		        //	// osc_receiver.showNotHandledWarning();
                         // })
-			.else_show_warning(); // Show not handled warning
 
                 // NOTE: You can also simply use ofxOscMessage
 		//
