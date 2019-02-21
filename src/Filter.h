@@ -309,10 +309,7 @@ namespace ofxSimpleOsc {
 				return false;
 			}
 			else {
-				*p->x = get<float>(m, 0);
-				*p->y = get<float>(m, 1);
-				*p->z = get<float>(m, 2);
-				*p->w = get<float>(m, 3);
+				*p = ofQuaternion(get<int>(m, 0), get<int>(m, 1), get<int>(m, 2), get<int>(m, 3));
 				return true;
 			}
 		}

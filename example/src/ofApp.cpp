@@ -24,11 +24,13 @@ void ofApp::setup(){
 			.bind("/size", &w, &h)
 			.else_show_warning();
 	});
+
+	osc_sender.setup("localhost", 7778);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	//osc_sender.send("/color", color);
 }
 
 //--------------------------------------------------------------
@@ -41,7 +43,15 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	if (key == 's') {
+		osc_sender.send("/size", w, h);
+	}
+	else if (key == 'p') {
+		osc_sender.send("/point", point);
+	}
+	else if(key == 't') {
+		osc_sender.send("/test", "this is test from ofxSimpleOsc");
+	}
 }
 
 //--------------------------------------------------------------
