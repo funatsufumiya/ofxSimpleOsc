@@ -86,7 +86,8 @@ void ofApp::setup(){
 		//	 osc_receiver.showNotHandledWarning();
 		// }
 
-                // NOTE: And if you want, you can move above codes into `void ofApp::onOscMessage(const ofxOscMessage& msg)` or so on
+                // NOTE: And if you want, you can move above codes into
+                //       `void ofApp::onOscMessage(const ofxOscMessage& msg)` or so on
 		//
                 // ofApp::onOscMessage(msg);
                 //
