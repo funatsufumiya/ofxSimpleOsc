@@ -18,6 +18,11 @@ namespace ofxSimpleOsc {
 		void addArg(ofxOscMessage& m, T arg);
 
 	public:
+		Sender(){}
+		~Sender(){
+			sender.clear();
+		}
+
 		void setup(const std::string& host, int port);
 		void send(ofxOscMessage& message, bool wrap_in_bundle=true);
 

@@ -200,8 +200,8 @@ namespace ofxSimpleOsc {
 				return false;
 			}
 			else {
-				*p.x = get<float>(m, 0);
-				*p.y = get<float>(m, 1);
+				p->x = get<float>(m, 0);
+				p->y = get<float>(m, 1);
 				return true;
 			}
 		}
@@ -214,14 +214,14 @@ namespace ofxSimpleOsc {
 				return false;
 			}
 			else if(n == 2){
-				*p.x = get<float>(m, 0);
-				*p.y = get<float>(m, 1);
+				p->x = get<float>(m, 0);
+				p->y = get<float>(m, 1);
 				return true;
 			}
 			else{
-				*p.x = get<float>(m, 0);
-				*p.y = get<float>(m, 1);
-				*p.z = get<float>(m, 2);
+				p->x = get<float>(m, 0);
+				p->y = get<float>(m, 1);
+				p->z = get<float>(m, 2);
 				return true;
 			}
 		}
@@ -235,15 +235,35 @@ namespace ofxSimpleOsc {
 			}
 			else if(n == 1){
 				*p = ofColor(get<float>(m, 0));
+				return true;
 			}
 			else if(n == 2){
 				*p = ofColor(get<float>(m, 0), get<float>(m, 1));
+				return true;
 			}
 			else if(n == 3){
 				*p = ofColor(get<float>(m, 0), get<float>(m, 1), get<float>(m, 2));
+				return true;
 			}
 			else if(n == 4){
 				*p = ofColor(get<float>(m, 0), get<float>(m, 1), get<float>(m, 2), get<float>(m, 3));
+				return true;
+			}
+		}
+
+		template<typename Arg = ofRectangle>
+		bool bindImpl(ofRectangle* p) {
+			size_t n = m.getNumArgs();
+			
+			if (n < 4){
+				return false;
+			}
+			else {
+				p->x = get<float>(m, 0);
+				p->y = get<float>(m, 1);
+				p->w = get<float>(m, 2);
+				p->h = get<float>(m, 3);
+				return true;
 			}
 		}
 

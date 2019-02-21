@@ -30,6 +30,12 @@ namespace ofxSimpleOsc {
 		std::string getOscArg(const ofxOscMessage& m, size_t i);
 
 	public:
+		Receiver() {}
+		~Receiver() {
+			if (receiver.isListening()) {
+				receiver.stop();
+			}
+		}
 		void setup(int port, bool enable_osc_log, std::function<void(const ofxOscMessage&)> receive_func);
 		void setup(int port, std::function<void(const ofxOscMessage&)> receive_func);
 
