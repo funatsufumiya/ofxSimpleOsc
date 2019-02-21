@@ -8,7 +8,7 @@
 ## Dependency
 
 - `ofxOsc`
-- C++14 or higher (you may need change project settings to use `-std=c++14`)
+- C++11 or higher
 
 ## License
 
