@@ -251,6 +251,72 @@ namespace ofxSimpleOsc {
 			}
 		}
 
+		template<typename Arg = ofFloatColor>
+		bool bindImpl(ofFloatColor* p) {
+			size_t n = m.getNumArgs();
+			
+			if (n < 1){
+				return false;
+			}
+			else if(n == 1){
+				*p = ofFloatColor(get<float>(m, 0));
+				return true;
+			}
+			else if(n == 2){
+				*p = ofFloatColor(get<float>(m, 0), get<float>(m, 1));
+				return true;
+			}
+			else if(n == 3){
+				*p = ofFloatColor(get<float>(m, 0), get<float>(m, 1), get<float>(m, 2));
+				return true;
+			}
+			else if(n == 4){
+				*p = ofFloatColor(get<float>(m, 0), get<float>(m, 1), get<float>(m, 2), get<float>(m, 3));
+				return true;
+			}
+		}
+
+		template<typename Arg = ofShortColor>
+		bool bindImpl(ofShortColor* p) {
+			size_t n = m.getNumArgs();
+			
+			if (n < 1){
+				return false;
+			}
+			else if(n == 1){
+				*p = ofShortColor(get<int>(m, 0));
+				return true;
+			}
+			else if(n == 2){
+				*p = ofShortColor(get<int>(m, 0), get<int>(m, 1));
+				return true;
+			}
+			else if(n == 3){
+				*p = ofShortColor(get<int>(m, 0), get<int>(m, 1), get<int>(m, 2));
+				return true;
+			}
+			else if(n == 4){
+				*p = ofShortColor(get<int>(m, 0), get<int>(m, 1), get<int>(m, 2), get<int>(m, 3));
+				return true;
+			}
+		}
+
+		template<typename Arg = ofQuaternion>
+		bool bindImpl(ofQuaternion* p) {
+			size_t n = m.getNumArgs();
+			
+			if (n < 4){
+				return false;
+			}
+			else {
+				*p->x = get<float>(m, 0);
+				*p->y = get<float>(m, 1);
+				*p->z = get<float>(m, 2);
+				*p->w = get<float>(m, 3);
+				return true;
+			}
+		}
+
 		template<typename Arg = ofRectangle>
 		bool bindImpl(ofRectangle* p) {
 			size_t n = m.getNumArgs();
