@@ -85,7 +85,7 @@ void ofApp::setup(){
 		        //	// osc_receiver.showNotHandledWarning();
                         // })
 
-                // NOTE: You can also simply use ofxOscMessage, without Filter
+                // NOTE: You can also simply use ofxOscMessage, without using Filter
 		//
 		// if (msg.getAddress() == "/test") {
 		//	 ofLog() << "test OSC received!";
