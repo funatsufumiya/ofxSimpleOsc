@@ -4,6 +4,7 @@
 #include <functional>
 #include <tuple>
 
+#include "ofMain.h"
 #include "ofxOsc.h"
 
 namespace ofxSimpleOsc {
@@ -21,7 +22,7 @@ namespace ofxSimpleOsc {
 		};
 
 		template<typename F, typename R, typename... Args>
-		constexpr function_traits<R, Args...> make_function_traits_impl(F, R(F::*f)(Args...) const) {
+		const function_traits<R, Args...> make_function_traits_impl(F, R(F::*f)(Args...) const) {
 			return function_traits<R, Args...>();
 		}
 
@@ -31,57 +32,77 @@ namespace ofxSimpleOsc {
 		}
 
 		template<typename R, typename Head, typename... Tail>
-		constexpr function_traits<R, Tail...> tail(function_traits<R, Head, Tail...> ft) {
+		const function_traits<R, Tail...> tail(function_traits<R, Head, Tail...> ft) {
 			return function_traits<R, Tail...>();
 		}
 
 		template<typename T>
 		T get(const ofxOscMessage& m, size_t i);
-
-		template<>
-		int get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsInt(i);
-		}
-
-		template<>
-		double get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsDouble(i);
-		}
-
-		template<>
-		float get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsFloat(i);
-		}
-
-		template<>
-		bool get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsBool(i);
-		}
-
-		template<>
-		char get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsChar(i);
-		}
-
-		template<>
-		long long get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsInt64(i);
-		}
-
-		template<>
-		long get(const ofxOscMessage& m, size_t i) {
-			return m.getArgAsInt64(i);
-		}
-
-		template<>
-		ofBuffer get(const ofxOscMessage& m, size_t i) {
-			return std::move(m.getArgAsBlob(i));
-		}
-
-		template<>
-		std::string get(const ofxOscMessage& m, size_t i) {
-			return std::move(m.getArgAsString(i));
-		}
+        
+        template<typename R>
+        void exec_fn_impl(std::function<R()> f){
+            f();
+        }
+        
+        template<typename R, typename T1>
+        void exec_fn_impl(std::function<R(T1)> f){
+            f(get<T1>(m, 0));
+        }
+        
+        template<typename R, typename T1, typename T2>
+        void exec_fn_impl(std::function<R(T1, T2)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3>
+        void exec_fn_impl(std::function<R(T1, T2, T3)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4>
+        void exec_fn_impl(std::function<R(T1, T2, T3, T4)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
+        void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+        void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+        void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+        void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7));
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+        void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
+            f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7), get<T9>(m, 8));
+        }
+        
+        template<typename R, typename... Args>
+        void exec_fn(std::function<R(Args...)> f) {
+            exec_fn_impl<R,Args...>(f);
+        }
+        
+        template<typename R, typename Arg>
+        void exec_fn(std::function<R(Arg)> f) {
+            exec_fn_impl<R,Arg>(f);
+        }
+        
+        template<typename R, typename Arg = void>
+        void exec_fn(std::function<R()> f) {
+            exec_fn_impl<R>(f);
+        }
 
 		template<typename F, typename R, typename... Args>
 		bool matchFuncCall(F& f, function_traits<R, Args...> func_traits) {
@@ -112,71 +133,6 @@ namespace ofxSimpleOsc {
 		bool matchFuncCall(F& f, function_traits<R, ofxOscMessage> func_traits) {
 			f(m);
 			return true;
-		}
-
-		template<typename R, typename... Args>
-		void exec_fn(std::function<R(Args...)> f) {
-			exec_fn_impl<R,Args...>(f);
-		}
-
-		template<typename R, typename Arg>
-		void exec_fn(std::function<R(Arg)> f) {
-			exec_fn_impl<R,Arg>(f);
-		}
-
-		template<typename R, typename Arg = void>
-		void exec_fn(std::function<R()> f) {
-			exec_fn_impl<R>(f);
-		}
-
-		template<typename R>
-		void exec_fn_impl(std::function<R()> f){
-			f();
-		}
-
-		template<typename R, typename T1>
-		void exec_fn_impl(std::function<R(T1)> f){
-			f(get<T1>(m, 0));
-		}
-
-		template<typename R, typename T1, typename T2>
-		void exec_fn_impl(std::function<R(T1, T2)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3>
-		void exec_fn_impl(std::function<R(T1, T2, T3)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f){
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7), get<T9>(m, 8));
 		}
 
 		template<typename... Args>
@@ -309,7 +265,7 @@ namespace ofxSimpleOsc {
 				return false;
 			}
 			else {
-				*p = ofQuaternion(get<int>(m, 0), get<int>(m, 1), get<int>(m, 2), get<int>(m, 3));
+				*p = ofQuaternion(get<float>(m, 0), get<float>(m, 1), get<float>(m, 2), get<float>(m, 3));
 				return true;
 			}
 		}
@@ -322,10 +278,7 @@ namespace ofxSimpleOsc {
 				return false;
 			}
 			else {
-				p->x = get<float>(m, 0);
-				p->y = get<float>(m, 1);
-				p->w = get<float>(m, 2);
-				p->h = get<float>(m, 3);
+                *p = ofRectangle(get<float>(m, 0), get<float>(m, 1), get<float>(m, 2), get<float>(m, 3));
 				return true;
 			}
 		}

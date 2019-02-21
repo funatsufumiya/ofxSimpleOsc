@@ -22,9 +22,9 @@ void ofApp::setup(){
 			.bind("/background", &background_color)
 			.bind("/point", &point)
 			.bind("/size", &w, &h)
-			.when("/test2", [&](float a, float b) {
-				ofLog() << "test2 (" << a << "," << b << ")";
-			})
+//            .when("/test2", [&](float a, float b) {
+//                ofLog() << "test2 (" << a << "," << b << ")";
+//            })
 			.when("/test3", [&](const ofxOscMessage& m) {
 				ofLog() << "test3 (" << m.getArgAsString(0) << ")";
 			})
