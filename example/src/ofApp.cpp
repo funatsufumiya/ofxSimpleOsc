@@ -40,6 +40,10 @@ void ofApp::setup(){
 		// }
 	});
 
+	//// ofxSimpleOsc simply print logs of received OSC messages. if you don't need them, you can disable:
+	//
+	// osc_receiver.setOscLogEnabled(false);
+
 	osc_sender.setup("localhost", 7778);
 }
 

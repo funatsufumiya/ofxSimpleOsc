@@ -72,7 +72,7 @@ void ofApp::setup(){
                         })
 			.else_show_warning();
 
-                //// You can also simply use ofxOscMessage
+                // NOTE: You can also simply use ofxOscMessage
 		//
 		// if (msg.getAddress() == "/test") {
 		//	 ofLog() << "test OSC received!";
@@ -82,6 +82,12 @@ void ofApp::setup(){
 		// }
 
 	});
+
+        
+        // NOTE: ofxSimpleOsc simply print logs of received OSC messages.
+        //       if you don't need them, you can disable:
+        //
+	// osc_receiver.setOscLogEnabled(false);
 
         // setup sender
         osc_sender.setup("localhost", 7778);
