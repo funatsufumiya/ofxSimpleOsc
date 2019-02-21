@@ -95,7 +95,7 @@ void ofApp::setup(){
 	});
 
         
-        // NOTE: ofxSimpleOsc simply print logs of received OSC messages.
+        // NOTE: ofxSimpleOsc prints logs of every received OSC messages.
         //       if you don't need them, you can disable:
         //
 	// osc_receiver.setOscLogEnabled(false);
