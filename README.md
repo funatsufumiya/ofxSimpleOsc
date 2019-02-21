@@ -78,9 +78,10 @@ void ofApp::setup(){
 			.else_show_warning(); // Show not handled warning
 
                         // .else_([&](const ofxOscMessage& m){
-                        //      // if you want to write code at end of method chain,
+                        //      // If you want to write code at end of method chain,
                         //      // please add .else_() instead of .else_show_warning()
-                        //      // for warning, in this block, you can use
+                        //
+                        //      // To warn, in this block, you can use
 		        //	// osc_receiver.showNotHandledWarning();
                         // })
 
