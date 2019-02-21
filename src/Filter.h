@@ -89,9 +89,44 @@ namespace ofxSimpleOsc {
             f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7), get<T9>(m, 8));
         }
         
-        template<typename R, typename... Args>
-        void exec_fn(std::function<R(Args...)> f) {
-            exec_fn_impl<R,Args...>(f);
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+        void exec_fn(std::function<R(T1,T2,T3,T4,T5,T6,T7,T8,T9)> f) {
+            exec_fn_impl<R,T1,T2,T3,T4,T5,T6,T7,T8,T9>(f);
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+        void exec_fn(std::function<R(T1,T2,T3,T4,T5,T6,T7,T8)> f) {
+            exec_fn_impl<R,T1,T2,T3,T4,T5,T6,T7,T8>(f);
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+        void exec_fn(std::function<R(T1,T2,T3,T4,T5,T6,T7)> f) {
+            exec_fn_impl<R,T1,T2,T3,T4,T5,T6,T7>(f);
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+        void exec_fn(std::function<R(T1,T2,T3,T4,T5,T6)> f) {
+            exec_fn_impl<R,T1,T2,T3,T4,T5,T6>(f);
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
+        void exec_fn(std::function<R(T1,T2,T3,T4,T5)> f) {
+            exec_fn_impl<R,T1,T2,T3,T4,T5>(f);
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3, typename T4>
+        void exec_fn(std::function<R(T1,T2,T3,T4)> f) {
+            exec_fn_impl<R,T1,T2,T3,T4>(f);
+        }
+        
+        template<typename R, typename T1, typename T2, typename T3>
+        void exec_fn(std::function<R(T1,T2,T3)> f) {
+            exec_fn_impl<R,T1,T2,T3>(f);
+        }
+        
+        template<typename R, typename T1, typename T2>
+        void exec_fn(std::function<R(T1,T2)> f) {
+            exec_fn_impl<R,T1,T2>(f);
         }
         
         template<typename R, typename Arg>
