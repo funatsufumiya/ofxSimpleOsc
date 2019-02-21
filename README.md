@@ -21,6 +21,7 @@ class ofApp : public ofBaseApp{
         void setup();
 	void update();
 	void draw();
+        void keyPressed(int key);
 
         // ...
 
@@ -52,7 +53,7 @@ void ofApp::setup(){
 	w = 100.0;
 	h = 100.0;
 
-        // define receiver
+        // setup receiver
 	osc_receiver.setup(7777, [&](const ofxOscMessage& msg) {
                 // filter OSC
 		ofxSimpleOsc::filter(msg)
@@ -65,11 +66,14 @@ void ofApp::setup(){
 			.bind("/size", &w, &h)
 			.else_show_warning();
 	});
+
+        // setup sender
+        osc_sender.setup("localhost", 7778);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	//osc_sender.send("/color", color);
 }
 
 //--------------------------------------------------------------
@@ -78,5 +82,18 @@ void ofApp::draw(){
 
 	ofSetColor(color);
 	ofDrawEllipse(point, w, h);
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+	if (key == 's') {
+		osc_sender.send("/size", w, h);
+	}
+	else if (key == 'p') {
+		osc_sender.send("/point", point);
+	}
+	else if(key == 't') {
+		osc_sender.send("/test", "this is test from ofxSimpleOsc");
+	}
 }
 ```
