@@ -3,7 +3,7 @@
 ## Features
 - Print every logs of received OSCs (you can also disable)
 - Show warning when you missed handling (use `Filter#else_show_warning()` or `Receiver#showNotHandledWarning()` )
-- Selectable APIs as you like ( filter chain style, bind values, lambda, or old style )
+- Selectable APIs as you like ( filter chain style, bind values, lambda block / callback style, or simply use if-else style )
 
 ## Dependency
 
