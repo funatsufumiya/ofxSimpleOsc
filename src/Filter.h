@@ -27,7 +27,7 @@ namespace ofxSimpleOsc {
 		}
 
 		template<typename F>
-		constexpr auto make_function_traits(F f) {
+		constexpr auto make_function_traits(F f) -> decltype(make_function_traits_impl(f, &F::operator())) {
 			return make_function_traits_impl(f, &F::operator());
 		}
 
