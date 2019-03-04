@@ -33,6 +33,7 @@ namespace ofxSimpleOsc {
 		Receiver() {}
 		~Receiver() {
 			if (receiver.isListening()) {
+				ofRemoveListener(ofEvents().update, this, &Receiver::update);
 				receiver.stop();
 			}
 		}
