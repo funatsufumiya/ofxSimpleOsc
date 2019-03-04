@@ -8,6 +8,36 @@
 #include "ofxOsc.h"
 
 namespace ofxSimpleOsc {
+	namespace detail {
+		template <typename type, type ... ns>
+		struct integer_sequence {
+			using value_type = type;
+			static constexpr std::size_t size() noexcept { return sizeof...(ns); }
+		};
+		
+		template <typename integer_type, integer_type n, integer_type ... ns>
+		struct make_integer_sequence_impl {
+			struct sequence_wrapper { using type = integer_sequence<integer_type, ns ...>; };
+			using type = typename conditional<
+			0 < n,
+			make_integer_sequence_impl<integer_type, n - 1, n - 1, ns ...>,
+			sequence_wrapper
+			>::type::type;
+		};
+		
+		template <typename type, type n>
+		using make_integer_sequence = typename make_integer_sequence_impl<type, n>::type;
+		
+		template <std::size_t ... ns>
+		using index_sequence = integer_sequence<std::size_t, ns ...>;
+		
+		template <std::size_t n>
+		using make_index_sequence = make_integer_sequence<std::size_t, n>;
+		
+		template <typename... types>
+		using index_sequence_for = make_index_sequence<sizeof...(types)>;
+	};
+	
 	class Filter {
 	protected:
 		const ofxOscMessage& m;
@@ -38,127 +68,18 @@ namespace ofxSimpleOsc {
 
 		template<typename T>
 		T get(const ofxOscMessage& m, size_t i);
-        
-		template<typename R>
-		void exec_fn_impl(std::function<R()> f) {
-			f();
+		
+		template <typename R, typename ... Ts, std::size_t ... indices>
+		void exec_fn_impl(std::function<R(Ts ...)> f, ofxSimpleOsc::detail::index_sequence<indices ...>) {
+			f(get<typename std::tuple_element<indices, std::tuple<Ts ...>>::type>(m, indices) ...);
 		}
-
-		template<typename R, typename T1>
-		void exec_fn_impl(std::function<R(T1)> f) {
-			f(get<T1>(m, 0));
+		
+		
+		template <typename R, typename ... Ts>
+		void exec_fn(std::function<R(Ts ...)> f) {
+			exec_fn_impl(f, ofxSimpleOsc::detail::make_index_sequence<sizeof...(Ts)>{});
 		}
-
-		template<typename R, typename T1, typename T2>
-		void exec_fn_impl(std::function<R(T1, T2)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3>
-		void exec_fn_impl(std::function<R(T1, T2, T3)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5, T6)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5, T6, T7)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8, T9)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7), get<T9>(m, 8));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8, T10)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7), get<T9>(m, 8), get<T10>(m, 9));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10, typename T11>
-		void exec_fn_impl(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8, T10, T11)> f) {
-			f(get<T1>(m, 0), get<T2>(m, 1), get<T3>(m, 2), get<T4>(m, 3), get<T5>(m, 4), get<T6>(m, 5), get<T7>(m, 6), get<T8>(m, 7), get<T9>(m, 8), get<T10>(m, 9), get<T11>(m, 10));
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10, typename T11>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8, T9)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5, T6, T7, T8, T9>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5, T6, T7, T8)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5, T6, T7, T8>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5, T6, T7)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5, T6, T7>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5, T6)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5, T6>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
-		void exec_fn(std::function<R(T1, T2, T3, T4, T5)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4, T5>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3, typename T4>
-		void exec_fn(std::function<R(T1, T2, T3, T4)> f) {
-			exec_fn_impl<R, T1, T2, T3, T4>(f);
-		}
-
-		template<typename R, typename T1, typename T2, typename T3>
-		void exec_fn(std::function<R(T1, T2, T3)> f) {
-			exec_fn_impl<R, T1, T2, T3>(f);
-		}
-
-		template<typename R, typename T1, typename T2>
-		void exec_fn(std::function<R(T1, T2)> f) {
-			exec_fn_impl<R, T1, T2>(f);
-		}
-
-		template<typename R, typename Arg>
-		void exec_fn(std::function<R(Arg)> f) {
-			exec_fn_impl<R, Arg>(f);
-		}
-
-		template<typename R, typename Arg = void>
-		void exec_fn(std::function<R()> f) {
-			exec_fn_impl<R>(f);
-		}
-
+		
 		template<typename F, typename R, typename... Args>
 		bool matchFuncCall(F& f, function_traits<R, Args...> func_traits) {
 			constexpr size_t n = sizeof...(Args);
@@ -167,7 +88,7 @@ namespace ofxSimpleOsc {
 				return false;
 			}
 			else {
-				exec_fn<R,Args...>(f);
+				exec_fn<R,Args...>(std::function<R(Args ...)>(f));
 				return true;
 			}
 		}
@@ -337,63 +258,17 @@ namespace ofxSimpleOsc {
 				return true;
 			}
 		}
-
-		template<typename T1>
-		void bind_params(T1* _1){
-			*_1 = get<T1>(m, 0);
+		
+		template <typename ... Ts, std::size_t ... indices>
+		void bind_params_impl(std::tuple<Ts * ...> t, ofxSimpleOsc::detail::index_sequence<indices ...>) {
+			auto trash = {(*std::get<indices>(t) = get<typename std::tuple_element<indices, std::tuple<Ts ...>>::type>(m, indices), 0)...};
 		}
-
-		template<typename T1, typename T2>
-		void bind_params(T1* _1, T2* _2){
-			*_1 = get<T1>(m, 0);
-			*_2 = get<T2>(m, 1);
+		
+		template <typename ... Ts>
+		void bind_params(Ts * ... vs) {
+			bind_params_impl(std::make_tuple(vs ...), ofxSimpleOsc::detail::make_index_sequence<sizeof...(Ts)>{});
 		}
-
-		template<typename T1, typename T2, typename T3>
-		void bind_params(T1* _1, T2* _2, T3* _3){
-			*_1 = get<T1>(m, 0);
-			*_2 = get<T2>(m, 1);
-			*_3 = get<T3>(m, 2);
-		}
-
-		template<typename T1, typename T2, typename T3, typename T4>
-		void bind_params(T1* _1, T2* _2, T3* _3, T4* _4){
-			*_1 = get<T1>(m, 0);
-			*_2 = get<T2>(m, 1);
-			*_3 = get<T3>(m, 2);
-			*_4 = get<T4>(m, 3);
-		}
-
-		template<typename T1, typename T2, typename T3, typename T4, typename T5>
-		void bind_params(T1* _1, T2* _2, T3* _3, T4* _4, T5* _5){
-			*_1 = get<T1>(m, 0);
-			*_2 = get<T2>(m, 1);
-			*_3 = get<T3>(m, 2);
-			*_4 = get<T4>(m, 3);
-			*_5 = get<T5>(m, 4);
-		}
-
-		template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-		void bind_params(T1* _1, T2* _2, T3* _3, T4* _4, T5* _5, T6* _6){
-			*_1 = get<T1>(m, 0);
-			*_2 = get<T2>(m, 1);
-			*_3 = get<T3>(m, 2);
-			*_4 = get<T4>(m, 3);
-			*_5 = get<T5>(m, 4);
-			*_6 = get<T6>(m, 5);
-		}
-
-		template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-		void bind_params(T1* _1, T2* _2, T3* _3, T4* _4, T5* _5, T6* _6, T7* _7){
-			*_1 = get<T1>(m, 0);
-			*_2 = get<T2>(m, 1);
-			*_3 = get<T3>(m, 2);
-			*_4 = get<T4>(m, 3);
-			*_5 = get<T5>(m, 4);
-			*_6 = get<T6>(m, 5);
-			*_7 = get<T7>(m, 6);
-		}
-
+		
 	public:
 		Filter(const ofxOscMessage & msg) : m(msg) {}
 
