@@ -27,6 +27,9 @@ void Receiver::update(ofEventArgs & args)
 
 void Receiver::setup(int port, bool _enable_log, std::function<void(const ofxOscMessage&)> receive_func)
 {
+	if(receiver.isListening()) {
+		ofRemoveListener(ofEvents().update, this, &Receiver::update);
+	}
 	enable_log = _enable_log;
 	receiver.setup(port);
 	ofAddListener(ofEvents().update, this, &Receiver::update);
