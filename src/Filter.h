@@ -325,10 +325,10 @@ namespace ofxSimpleOsc {
 			matched = true;
 		}
 
-		void else_show_warning(){
+		void else_show_warning(const string& module_name = "ofxSimpleOsc::Filter"){
 			if (matched) { return; }
 
-			ofLogWarning("ofxSimpleOsc::Filter") << m.getAddress() << " (typetag: " << m.getTypeString() << ") not match. ignored.";
+			ofLogWarning(module_name) << m.getAddress() << " (typetag: " << m.getTypeString() << ") not match. ignored.";
 		}
 	};
 
