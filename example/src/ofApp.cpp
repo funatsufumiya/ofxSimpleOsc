@@ -13,7 +13,9 @@ void ofApp::setup(){
 	w = 100.0;
 	h = 100.0;
 
+	// setup receiver
 	osc_receiver.setup(7777, [&](const ofxOscMessage& msg) {
+		// filter OSC
 		ofxSimpleOsc::filter(msg)
 			.when("/test", [&]() {
 				ofLog() << "test OSC received!";
@@ -28,9 +30,17 @@ void ofApp::setup(){
 			.when("/test3", [&](const ofxOscMessage& m) {
 				ofLog() << "test3 (" << m.getArgAsString(0) << ")";
 			})
-			.else_show_warning();
+			.else_show_warning(); // Show not handled warning
 
-		//// You can also simply use ofxOscMessage
+			// .else_([&](const ofxOscMessage& m){
+			//      // If you want to write code at end of method chain,
+			//      // please add .else_() instead of .else_show_warning()
+			//
+			//      // To warn, in this block, you can use
+			//	    // osc_receiver.showNotHandledWarning();
+			// })
+
+		// NOTE: You can also simply use ofxOscMessage, without using Filter
 		//
 		// if (msg.getAddress() == "/test") {
 		//	 ofLog() << "test OSC received!";
@@ -38,9 +48,17 @@ void ofApp::setup(){
 		// else {
 		//	 osc_receiver.showNotHandledWarning();
 		// }
+
+		// NOTE: And if you want, you can move above codes into
+		//       `void ofApp::onOscMessage(const ofxOscMessage& msg)` or so on
+		//
+		// ofApp::onOscMessage(msg);
+		//
+
 	});
 
-	//// ofxSimpleOsc simply print logs of received OSC messages. if you don't need them, you can disable:
+	// NOTE: ofxSimpleOsc prints logs of every received OSC messages.
+	//       if you don't need them, you can disable:
 	//
 	// osc_receiver.setOscLogEnabled(false);
 
