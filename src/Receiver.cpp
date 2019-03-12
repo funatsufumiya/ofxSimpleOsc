@@ -56,6 +56,11 @@ void ofxSimpleOsc::Receiver::printOsclog(const ofxOscMessage & m, bool print_arg
 	ofxSimpleOsc::logger.log(m, print_args, module_name);
 }
 
+void ofxSimpleOsc::Receiver::setOscLogEnabled(bool enabled)
+{
+	enable_log = enabled;
+}
+
 void ofxSimpleOsc::Receiver::setOscLogEnabled(bool _enable_log, bool _print_args, const std::string & _logger_module_name)
 {
 	enable_log = _enable_log;

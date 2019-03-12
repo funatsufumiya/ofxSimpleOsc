@@ -33,7 +33,8 @@ namespace ofxSimpleOsc {
 		void showNotHandledWarning(const std::string& module_name="ofxSimpleOsc::Receiver");
 		void showNotHandledWarning(const ofxOscMessage& m, const std::string& module_name="ofxSimpleOsc::Receiver");
 		void printOsclog(const ofxOscMessage & m, bool print_args=true, const std::string& module_name="ofxSimpleOsc::Receiver");
-		void setOscLogEnabled(bool enabled, bool print_args=true, const std::string& logger_module_name="ofxSimpleOsc::Receiver");
+		void setOscLogEnabled(bool enabled);
+		void setOscLogEnabled(bool enabled, bool print_args, const std::string& logger_module_name="ofxSimpleOsc::Receiver");
 		bool getOscLogEnabled();
 	};
 
