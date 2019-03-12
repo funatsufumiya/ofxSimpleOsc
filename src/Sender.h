@@ -4,15 +4,25 @@
 #include "ofxOsc.h"
 #include "ofMain.h"
 
+#include "Logger.h"
+
 namespace ofxSimpleOsc {
 	class Sender {
 	protected:
 		ofxOscSender sender;
 		ofxOscMessage temp_message;
 
+		bool print_log = false;
+		bool log_with_args = true;
+		std::string logger_module_name = "ofxSimpleOsc::Sender";
+
 		void sendImpl(ofxOscMessage& message)
 		{
 			sender.sendMessage(message);
+
+			if (print_log) {
+				ofxSimpleOsc::logger.log(temp_message, log_with_args, logger_module_name);
+			}
 		}
 
 		template<class Head, class ...Tail>
@@ -141,6 +151,10 @@ namespace ofxSimpleOsc {
 		void send(ofxOscMessage & message, bool wrap_in_bundle)
 		{
 			sender.sendMessage(message, wrap_in_bundle);
+
+			if (print_log) {
+				ofxSimpleOsc::logger.log(temp_message, log_with_args, logger_module_name);
+			}
 		}
 
 		template<class ...Args>
@@ -165,7 +179,25 @@ namespace ofxSimpleOsc {
 		{
 			temp_message.clear();
 			temp_message.setAddress(address);
-			sender.sendMessage(temp_message);
+
+			sendImpl(temp_message);
+		}
+
+		void setOscLogEnabled(bool _enable_log)
+		{
+			print_log = _enable_log;
+		}
+
+		void setOscLogEnabled(bool _enable_log, bool _print_args, const std::string & _logger_module_name="ofxSimpleOsc::Sender")
+		{
+			print_log = _enable_log;
+			log_with_args = _print_args;
+			logger_module_name = _logger_module_name;
+		}
+
+		bool getOscLogEnabled()
+		{
+			return print_log;
 		}
 	};
 };
