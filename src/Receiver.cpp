@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Logger.h"
+#include <cctype>
 
 using namespace std;
 using namespace ofxSimpleOsc;
