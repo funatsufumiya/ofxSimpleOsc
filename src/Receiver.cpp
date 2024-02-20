@@ -39,7 +39,7 @@ void ofxSimpleOsc::Receiver::setup(int port, bool _enable_log, std::function<voi
 
 void ofxSimpleOsc::Receiver::setup(int port, std::function<void(const ofxOscMessage&)> receive_func)
 {
-	setup(port, true, receive_func);
+	setup(port, false, receive_func);
 }
 
 void ofxSimpleOsc::Receiver::showNotHandledWarning(const std::string& module_name)
