@@ -12,7 +12,7 @@ namespace ofxSimpleOsc {
 	class Receiver {
 
 	protected:
-		bool enable_log = true;
+		bool enable_log = false;
 		bool print_args = true;
 		std::string logger_module_name = "ofxSimpleOsc::Receiver";
 		ofxOscReceiver receiver;
