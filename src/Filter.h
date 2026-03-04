@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 #include <tuple>
+#include <type_traits>
 
 #include "ofMain.h"
 #include "ofxOsc.h"
@@ -71,7 +72,7 @@ namespace ofxSimpleOsc {
 		
 		template <typename R, typename ... Ts, std::size_t ... indices>
 		void exec_fn_impl(std::function<R(Ts ...)> f, ofxSimpleOsc::detail::index_sequence<indices ...>) {
-			f(get<typename std::tuple_element<indices, std::tuple<Ts ...>>::type>(m, indices) ...);
+			f(get<std::decay_t<typename std::tuple_element<indices, std::tuple<Ts ...>>::type>>(m, indices) ...);
 		}
 		
 		
