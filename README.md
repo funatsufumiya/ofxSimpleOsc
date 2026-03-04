@@ -70,11 +70,11 @@ void ofApp::setup(){
             .bind("/point", &point)
             .bind("/size", &w, &h)
             .when("/test2", [&](float a, float b) {
-                    ofLog() << "test2 (" << a << "," << b << ")";
+                ofLog() << "test2 (" << a << "," << b << ")";
             })
             .when("/test3", [&](const ofxOscMessage& m){
-                                ofLog() << "test3 (" << m.getArgAsString(0) << ")";
-                        })
+				ofLog() << "test3 (" << m.getArgAsString(0) << ")";
+			})
             .else_show_warning(); // Show not handled warning
 
 			// .else_([&](const ofxOscMessage& m){
