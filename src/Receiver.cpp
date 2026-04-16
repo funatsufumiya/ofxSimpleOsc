@@ -9,7 +9,7 @@ using namespace ofxSimpleOsc;
 
 void ofxSimpleOsc::Receiver::update(ofEventArgs & args)
 {
-	while (receiver.hasWaitingMessages()) {
+	while (receiver.isListening() && receiver.hasWaitingMessages()) {
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
 
