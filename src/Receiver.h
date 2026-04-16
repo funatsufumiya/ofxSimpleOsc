@@ -14,6 +14,7 @@ namespace ofxSimpleOsc {
 	protected:
 		bool enable_log = false;
 		bool print_args = true;
+		bool alreadyExitted = false;
 		std::string logger_module_name = "ofxSimpleOsc::Receiver";
 		ofxOscReceiver receiver;
 		std::function<void(const ofxOscMessage&)> receive_func;
@@ -23,10 +24,7 @@ namespace ofxSimpleOsc {
 	public:
 		Receiver() {}
 		~Receiver() {
-			if (receiver.isListening()) {
-				ofRemoveListener(ofEvents().update, this, &Receiver::update);
-				receiver.stop();
-			}
+			stop();
 		}
 		void setup(int port, bool enable_osc_log, std::function<void(const ofxOscMessage&)> receive_func);
 		void setup(int port, std::function<void(const ofxOscMessage&)> receive_func);
@@ -35,6 +33,7 @@ namespace ofxSimpleOsc {
 		void printOsclog(const ofxOscMessage & m, bool print_args=true, const std::string& module_name="ofxSimpleOsc::Receiver");
 		void setOscLogEnabled(bool enabled);
 		void setOscLogEnabled(bool enabled, bool print_args, const std::string& logger_module_name="ofxSimpleOsc::Receiver");
+		void stop();
 		bool getOscLogEnabled();
 	};
 

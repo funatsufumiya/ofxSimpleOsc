@@ -73,3 +73,13 @@ bool ofxSimpleOsc::Receiver::getOscLogEnabled()
 {
 	return enable_log;
 }
+
+void ofxSimpleOsc::Receiver::stop(){
+	if(!alreadyExitted){
+		if (receiver.isListening()) {
+			ofRemoveListener(ofEvents().update, this, &Receiver::update);
+			receiver.stop();
+		}
+		alreadyExitted = true;
+	}
+}
